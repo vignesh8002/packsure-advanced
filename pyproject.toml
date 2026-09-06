@@ -1,0 +1,18 @@
+[project]
+name = "packsureai"
+version = "0.1.0"
+description = "Backend foundation for PackSure AI"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi",
+    "pydantic",
+    "python-multipart",
+    "uvicorn",
+]
+
+[dependency-groups]
+dev = [
+    "httpx2",
+    "pytest",
+]
