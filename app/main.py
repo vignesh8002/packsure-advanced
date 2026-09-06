@@ -7,10 +7,12 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 
 from app.api.router import router
+from app.api.image_processing import router as image_processing_router
 from app.models.envelopes import ErrorDetail, ErrorResponse
 
 app = FastAPI()
 app.include_router(router)
+app.include_router(image_processing_router)
 
 
 class RequestIdMiddleware(BaseHTTPMiddleware):
