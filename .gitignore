@@ -44,3 +44,6 @@ venv/
 .DS_Store
 .vscode/
 >>>>>>> 75df2cc (Initial commit: PackSure Advanced Python project)
+node_modules/
+__pycache__/
+*.pyc
