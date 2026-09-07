@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { processScan, uploadScan } from "../services/api";
 
 function Processing() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const productCount = location.state?.productCount || 1;
+  const files = location.state?.files || [];
+  const productCount = files.length;
 
   const messages = [
     "📖 Reading product labels...",
@@ -15,6 +17,7 @@ function Processing() {
   ];
 
   const [messageIndex, setMessageIndex] = useState(0);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const messageTimer = setInterval(() => {
@@ -23,17 +26,41 @@ function Processing() {
       );
     }, 1000);
 
-    const resultTimer = setTimeout(() => {
-      navigate("/results", {
-        state: { productCount: productCount },
-      });
-    }, 5000);
+    let cancelled = false;
+
+    async function processFiles() {
+      if (files.length === 0) {
+        setError("No product image was selected.");
+        return;
+      }
+
+      try {
+        const results = [];
+        for (const file of files) {
+          const upload = await uploadScan(file);
+          if (!upload.scan_id) {
+            throw new Error("The backend did not return a scan ID.");
+          }
+          const result = await processScan(upload.scan_id);
+          results.push(result);
+        }
+        if (!cancelled) {
+          navigate("/results", { state: { results } });
+        }
+      } catch (processingError) {
+        if (!cancelled) {
+          setError(processingError.message || "Unable to process the product image.");
+        }
+      }
+    }
+
+    processFiles();
 
     return () => {
       clearInterval(messageTimer);
-      clearTimeout(resultTimer);
+      cancelled = true;
     };
-  }, [navigate, productCount]);
+  }, [files, navigate]);
 
   return (
     <div
@@ -52,22 +79,25 @@ function Processing() {
         PACKSURE
       </h1>
 
-      <h2>🔍 Analyzing Products...</h2>
+      <h2>{error ? "⚠️ Processing failed" : "🔍 Analyzing Products..."}</h2>
 
       <div style={{ fontSize: "55px", margin: "15px" }}>
         ⏳
       </div>
 
-      <p style={{ fontSize: "18px" }}>
-        {messages[messageIndex]}
-      </p>
+      {error ? (
+        <p style={{ color: "#b91c1c", maxWidth: "600px" }}>{error}</p>
+      ) : (
+        <p style={{ fontSize: "18px" }}>{messages[messageIndex]}</p>
+      )}
 
       <p style={{ color: "#64748b" }}>
         Analyzing {productCount} product
         {productCount > 1 ? "s" : ""}...
       </p>
 
-      <p>Please wait...</p>
+      {!error && <p>Please wait...</p>}
+      {error && <button onClick={() => navigate("/scanner")}>Back to Scanner</button>}
     </div>
   );
 }

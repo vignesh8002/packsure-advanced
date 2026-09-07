@@ -38,6 +38,7 @@ function ComplianceCard({ check }) {
       <span style={{ fontWeight: "bold" }}>
         {check.status}
       </span>
+      {check.message && <small>{check.message}</small>}
     </div>
   );
 }

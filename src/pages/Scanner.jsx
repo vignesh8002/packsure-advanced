@@ -3,6 +3,14 @@ import { useNavigate } from "react-router-dom";
 import Camera from "../components/Camera";
 import ImageUpload from "../components/ImageUpload";
 
+function dataUrlToFile(dataUrl, index) {
+  const [header, encoded] = dataUrl.split(",");
+  const mime = header.match(/data:(.*?);base64/)?.[1] || "image/jpeg";
+  const binary = atob(encoded);
+  const bytes = Uint8Array.from(binary, (character) => character.charCodeAt(0));
+  return new File([bytes], `camera-product-${index + 1}.jpg`, { type: mime });
+}
+
 function Scanner() {
   const navigate = useNavigate();
   const [cameraImages, setCameraImages] = useState([]);
@@ -15,7 +23,11 @@ function Scanner() {
     }
 
     navigate("/processing", {
-      state: { productCount: cameraImages.length },
+      state: {
+        files: cameraImages.map((image, index) =>
+          typeof image === "string" ? dataUrlToFile(image, index) : image.file
+        ),
+      },
     });
   };
 
@@ -26,7 +38,7 @@ function Scanner() {
     }
 
     navigate("/processing", {
-      state: { productCount: uploadImages.length },
+      state: { files: uploadImages.map((image) => image.file) },
     });
   };
 

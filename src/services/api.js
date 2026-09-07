@@ -1,32 +1,27 @@
-const USE_MOCK_API = true;
-
-export async function scanProduct(image) {
-  if (USE_MOCK_API) {
-    return {
-      overall_score: 82,
-      status: "PASS",
-      checks: [
-        {
-          name: "Product Name",
-          status: "PASS",
-          message: "Product name is clearly mentioned.",
-        },
-        {
-          name: "Net Quantity",
-          status: "PASS",
-          message: "Net quantity is available.",
-        },
-        {
-          name: "Country of Origin",
-          status: "FAIL",
-          message: "Country of origin is missing.",
-        },
-        {
-          name: "Packing Date",
-          status: "UNCERTAIN",
-          message: "Packing date could not be clearly identified.",
-        },
-      ],
-    };
+async function readResponse(response) {
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(
+      body?.error?.message || body?.detail || "The backend request failed."
+    );
   }
+  return body;
+}
+
+export async function uploadScan(file) {
+  const formData = new FormData();
+  formData.append("file", file, file.name || "product.jpg");
+
+  const response = await fetch("/api/scan", {
+    method: "POST",
+    body: formData,
+  });
+  return readResponse(response);
+}
+
+export async function processScan(scanId) {
+  const response = await fetch(`/api/v1/scan/${encodeURIComponent(scanId)}/process`, {
+    method: "POST",
+  });
+  return readResponse(response);
 }

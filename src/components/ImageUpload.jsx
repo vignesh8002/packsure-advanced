@@ -25,12 +25,11 @@ function ImageUpload({ onImagesChange }) {
     const allowedTypes = [
       "image/jpeg",
       "image/png",
-      "image/webp",
     ];
 
     for (const file of files) {
       if (!allowedTypes.includes(file.type)) {
-        alert("Please upload only JPG, PNG or WEBP images.");
+        alert("Please upload only JPG or PNG images.");
         event.target.value = "";
         return;
       }
@@ -87,7 +86,7 @@ function ImageUpload({ onImagesChange }) {
       {images.length < MAX_PRODUCTS && (
         <input
           type="file"
-          accept="image/jpeg,image/png,image/webp"
+          accept="image/jpeg,image/png"
           multiple
           onChange={handleImageChange}
         />

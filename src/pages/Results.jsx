@@ -5,31 +5,7 @@ function Results() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const productCount = location.state?.productCount || 1;
-
-  const scores = [82, 65, 94, 48, 76, 91, 55, 88, 42, 97];
-
-  const statuses = [
-    "PASS",
-    "UNCERTAIN",
-    "PASS",
-    "FAIL",
-    "UNCERTAIN",
-    "PASS",
-    "UNCERTAIN",
-    "PASS",
-    "FAIL",
-    "PASS",
-  ];
-
-  const products = Array.from(
-    { length: productCount },
-    (_, i) => ({
-      number: i + 1,
-      score: scores[i] || 70,
-      status: statuses[i] || "PASS",
-    })
-  );
+  const results = location.state?.results || [];
 
   const getScoreStyle = (score) => {
     if (score >= 80) {
@@ -71,28 +47,6 @@ function Results() {
       background: "#fef9c3",
       color: "#854d0e",
     };
-  };
-
-  const getChecks = (number) => {
-    if (number % 2 === 1) {
-      return [
-        ["Product Name", "PASS"],
-        ["Net Quantity", "PASS"],
-        ["Country of Origin", "FAIL"],
-        ["Packing Date", "UNCERTAIN"],
-        ["MRP", "PASS"],
-        ["Expiry Date", "PASS"],
-      ];
-    }
-
-    return [
-      ["Product Name", "PASS"],
-      ["Net Quantity", "FAIL"],
-      ["Country of Origin", "UNCERTAIN"],
-      ["Packing Date", "PASS"],
-      ["MRP", "FAIL"],
-      ["Expiry Date", "PASS"],
-    ];
   };
 
   return (
@@ -142,8 +96,7 @@ function Results() {
             color: "#64748b",
           }}
         >
-          {productCount} product
-          {productCount > 1 ? "s" : ""} analyzed
+          {results.length} product{results.length > 1 ? "s" : ""} analyzed
         </p>
       </div>
 
@@ -153,9 +106,18 @@ function Results() {
           margin: "0 auto",
         }}
       >
-        {products.map((product) => (
+        {results.map((response, index) => {
+          const result = response?.result || {};
+          const summary = result.compliance?.summary || {};
+          const score = Number(summary.score ?? 0);
+          const status = summary.overall || "UNKNOWN";
+          const rules = Array.isArray(result.compliance?.rules)
+            ? result.compliance.rules
+            : [];
+          const entities = result.entities || {};
+          return (
           <div
-            key={product.number}
+            key={response.scan_id || index}
             style={{
               background: "#ffffff",
               borderRadius: "16px",
@@ -174,7 +136,7 @@ function Results() {
                 margin: "0 0 8px",
               }}
             >
-              📦 Product {product.number}
+              📦 Product {index + 1}
             </h2>
 
             <div
@@ -195,7 +157,7 @@ function Results() {
 
               <div
                 style={{
-                  ...getScoreStyle(product.score),
+                  ...getScoreStyle(score),
                   width: "105px",
                   height: "58px",
                   margin: "0 auto 6px",
@@ -207,7 +169,7 @@ function Results() {
                 }}
               >
                 <strong style={{ fontSize: "20px" }}>
-                  {product.score}/100
+                  {score}/100
                 </strong>
 
                 <span
@@ -216,9 +178,9 @@ function Results() {
                     fontWeight: "bold",
                   }}
                 >
-                  {product.score >= 80
+                  {score >= 80
                     ? "HIGH"
-                    : product.score >= 50
+                    : score >= 50
                     ? "PARTIAL"
                     : "LOW"}
                 </span>
@@ -226,7 +188,7 @@ function Results() {
 
               <span
                 style={{
-                  ...getStatusStyle(product.status),
+                  ...getStatusStyle(status),
                   display: "inline-block",
                   padding: "5px 12px",
                   borderRadius: "15px",
@@ -234,7 +196,7 @@ function Results() {
                   fontWeight: "bold",
                 }}
               >
-                {product.status}
+                {status}
               </span>
             </div>
 
@@ -246,20 +208,36 @@ function Results() {
             >
               Compliance Checks
             </h3>
+            <p>
+              {summary.passed ?? 0} passed, {summary.failed ?? 0} failed,{" "}
+              {summary.review ?? 0} requiring review
+            </p>
 
-            {getChecks(product.number).map(
-              ([name, status]) => (
+            {rules.map((rule, ruleIndex) => (
                 <ComplianceCard
-                  key={name}
+                  key={`${rule.rule_no}-${ruleIndex}`}
                   check={{
-                    name: name,
-                    status: status,
+                    name: rule.requirement || rule.rule_no || "Compliance rule",
+                    status: rule.status || "UNKNOWN",
+                    message: rule.observation,
                   }}
                 />
-              )
-            )}
+            ))}
+
+            <h3 style={{ fontSize: "15px", margin: "10px 0 5px" }}>
+              Extracted Information
+            </h3>
+            <p><strong>OCR:</strong> {result.ocr?.full_text || "No text detected."}</p>
+            <p><strong>Languages:</strong> {result.detected_languages?.join(", ") || "Not detected"}</p>
+            <p><strong>Entities:</strong> {Object.entries(entities)
+              .filter(([, value]) => value)
+              .map(([key, value]) => `${key}: ${value}`)
+              .join(" | ") || "No entities detected."}</p>
+            <p><strong>Image quality:</strong> {result.quality?.quality_rating || "Unavailable"}
+              {result.quality?.quality_score != null ? ` (${result.quality.quality_score}/100)` : ""}</p>
           </div>
-        ))}
+          );
+        })}
 
         <button
           onClick={() => navigate("/scanner")}
