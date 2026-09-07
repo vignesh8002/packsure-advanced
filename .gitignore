@@ -13,3 +13,4 @@ wheels/
 # Temporary uploaded files
 uploads/*
 !uploads/.gitkeep
+node_modules/
