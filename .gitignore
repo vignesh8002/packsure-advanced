@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Python
 __pycache__/
 *.py[cod]
@@ -32,3 +33,14 @@ uploads/*
 # OS files
 .DS_Store
 Thumbs.db
+=======
+﻿__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+*.sqlite3
+.DS_Store
+.vscode/
+>>>>>>> 75df2cc (Initial commit: PackSure Advanced Python project)
