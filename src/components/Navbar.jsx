@@ -1,6 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function Navbar() {
+  const location = useLocation();
+
+  let textColor = "#7e22ce";
+
+  // Scanner + Analysing → Blue
+  if (
+    location.pathname === "/scanner" ||
+    location.pathname === "/processing"
+  ) {
+    textColor = "#2563eb";
+  }
+
   return (
     <nav
       style={{
@@ -15,16 +27,43 @@ function Navbar() {
       <Link
         to="/"
         style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
           textDecoration: "none",
           fontSize: "22px",
           fontWeight: "bold",
-          color: "#2563eb",
         }}
       >
-        📦 PACKSURE 
-      </Link>
+        {/* BOX LOGO - SANDAL COLOUR ONLY */}
+        <span
+          style={{
+            fontSize: "22px",
+            color: "#b8956a",
+          }}
+        >
+          📦
+        </span>
 
-      
+        {/* PACKSURE TEXT */}
+        {location.pathname === "/results" ? (
+          <span
+            style={{
+              background:
+                "linear-gradient(90deg, #16a34a, #ec4899, #eab308)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+          >
+            PACKSURE
+          </span>
+        ) : (
+          <span style={{ color: textColor }}>
+            PACKSURE
+          </span>
+        )}
+      </Link>
     </nav>
   );
 }

@@ -22,11 +22,14 @@ function Results() {
     "PASS",
   ];
 
-  const products = Array.from({ length: productCount }, (_, i) => ({
-    number: i + 1,
-    score: scores[i] || 70,
-    status: statuses[i] || "PASS",
-  }));
+  const products = Array.from(
+    { length: productCount },
+    (_, i) => ({
+      number: i + 1,
+      score: scores[i] || 70,
+      status: statuses[i] || "PASS",
+    })
+  );
 
   const getScoreStyle = (score) => {
     if (score >= 80) {
@@ -77,8 +80,8 @@ function Results() {
         ["Net Quantity", "PASS"],
         ["Country of Origin", "FAIL"],
         ["Packing Date", "UNCERTAIN"],
-        ["Expiry Date", "PASS"],
         ["MRP", "PASS"],
+        ["Expiry Date", "PASS"],
       ];
     }
 
@@ -88,6 +91,7 @@ function Results() {
       ["Country of Origin", "UNCERTAIN"],
       ["Packing Date", "PASS"],
       ["MRP", "FAIL"],
+      ["Expiry Date", "PASS"],
     ];
   };
 
@@ -95,27 +99,41 @@ function Results() {
     <div
       style={{
         minHeight: "100vh",
-        background: "#eef6ff",
+        background:
+          "linear-gradient(135deg, #dcfce7 0%, #fbcfe8 50%, #fef08a 100%)",
         padding: "20px",
         boxSizing: "border-box",
       }}
     >
-      {/* Heading */}
       <div
         style={{
           textAlign: "center",
           marginBottom: "20px",
         }}
       >
+        {/* PACKSURE - GREEN + PINK + YELLOW */}
         <h1
           style={{
             margin: "5px 0",
             fontSize: "30px",
+            background:
+              "linear-gradient(90deg, #16a34a, #ec4899, #eab308)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+          }}
+        >
+          PACKSURE
+        </h1>
+
+        <h2
+          style={{
+            margin: "5px 0",
             color: "#1e3a8a",
           }}
         >
           📊 Compliance Results
-        </h1>
+        </h2>
 
         <p
           style={{
@@ -124,11 +142,11 @@ function Results() {
             color: "#64748b",
           }}
         >
-          {productCount} product{productCount > 1 ? "s" : ""} analyzed
+          {productCount} product
+          {productCount > 1 ? "s" : ""} analyzed
         </p>
       </div>
 
-      {/* Products */}
       <div
         style={{
           maxWidth: "900px",
@@ -143,11 +161,11 @@ function Results() {
               borderRadius: "16px",
               padding: "18px 22px",
               marginBottom: "18px",
-              boxShadow: "0 3px 12px rgba(0,0,0,0.08)",
+              boxShadow:
+                "0 3px 12px rgba(0,0,0,0.08)",
               boxSizing: "border-box",
             }}
           >
-            {/* Product title */}
             <h2
               style={{
                 textAlign: "center",
@@ -159,7 +177,6 @@ function Results() {
               📦 Product {product.number}
             </h2>
 
-            {/* Score */}
             <div
               style={{
                 textAlign: "center",
@@ -221,7 +238,6 @@ function Results() {
               </span>
             </div>
 
-            {/* Compliance checks */}
             <h3
               style={{
                 fontSize: "15px",
@@ -231,19 +247,20 @@ function Results() {
               Compliance Checks
             </h3>
 
-            {getChecks(product.number).map(([name, status]) => (
-              <ComplianceCard
-                key={name}
-                check={{
-                  name: name,
-                  status: status,
-                }}
-              />
-            ))}
+            {getChecks(product.number).map(
+              ([name, status]) => (
+                <ComplianceCard
+                  key={name}
+                  check={{
+                    name: name,
+                    status: status,
+                  }}
+                />
+              )
+            )}
           </div>
         ))}
 
-        {/* New Scan */}
         <button
           onClick={() => navigate("/scanner")}
           style={{

@@ -1,8 +1,9 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import Login from "./pages/Login";
 import Scanner from "./pages/Scanner";
-import Results from "./pages/Results";
 import Processing from "./pages/Processing";
+import Results from "./pages/Results";
 
 function Home() {
   return (
@@ -11,62 +12,25 @@ function Home() {
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
+        background:
+          "linear-gradient(135deg, #fce7f3 0%, #ede9fe 50%, #f5f3ff 100%)",
       }}
     >
-      {/* Hero Section */}
-      <section
-        style={{
-          padding: "70px 20px 50px",
-          textAlign: "center",
-          background:
-            "linear-gradient(135deg, #dbeafe 0%, #eff6ff 50%, #ffffff 100%)",
-        }}
-      >
-        <div
-          style={{
-            fontSize: "60px",
-            marginBottom: "10px",
-          }}
-        >
-          📦
-        </div>
+      <section style={{ padding: "70px 20px 50px", textAlign: "center" }}>
+        <div style={{ fontSize: "60px" }}>📦</div>
 
-        <h1
-          style={{
-            fontSize: "42px",
-            margin: "10px 0",
-            color: "#1e3a8a",
-          }}
-        >
-          PACKSURE 
+        <h1 style={{ fontSize: "42px", color: "#581c87" }}>
+          PACKSURE
         </h1>
 
-        <p
-          style={{
-            fontSize: "20px",
-            color: "#475569",
-            margin: "10px auto",
-            maxWidth: "600px",
-            lineHeight: "1.6",
-          }}
-        >
+        <p style={{ fontSize: "20px", color: "#4c1d95" }}>
           Smart Packaged Product Compliance Checker
         </p>
 
-        <p
-          style={{
-            fontSize: "16px",
-            color: "#64748b",
-            maxWidth: "600px",
-            margin: "15px auto 30px",
-            lineHeight: "1.7",
-          }}
-        >
-          Scan or upload a packaged product image to check
-          Legal Metrology compliance.
+        <p style={{ color: "#6b21a8", maxWidth: "600px", margin: "20px auto 30px" }}>
+          Scan or upload a packaged product image to check Legal Metrology compliance.
         </p>
 
-        {/* Buttons */}
         <div
           style={{
             display: "flex",
@@ -75,42 +39,40 @@ function Home() {
             flexWrap: "wrap",
           }}
         >
-          <Link to="/scanner" style={{ textDecoration: "none" }}>
-            <button
-              style={{
-                width: "220px",
-                padding: "16px",
-                fontSize: "17px",
-                fontWeight: "bold",
-                background: "#2563eb",
-                borderRadius: "12px",
-                boxShadow: "0 5px 15px rgba(37, 99, 235, 0.25)",
-              }}
-            >
-              📷 Scan Product
-            </button>
-          </Link>
+          <button
+            onClick={() => (window.location.href = "/scanner")}
+            style={{
+              width: "220px",
+              padding: "16px",
+              fontSize: "17px",
+              fontWeight: "bold",
+              background: "#9333ea",
+              color: "white",
+              border: "none",
+              borderRadius: "12px",
+            }}
+          >
+            📷 Scan Product
+          </button>
 
-          <Link to="/scanner" style={{ textDecoration: "none" }}>
-            <button
-              style={{
-                width: "220px",
-                padding: "16px",
-                fontSize: "17px",
-                fontWeight: "bold",
-                background: "#ffffff",
-                color: "#2563eb",
-                border: "2px solid #2563eb",
-                borderRadius: "12px",
-              }}
-            >
-              🖼️ Upload Image
-            </button>
-          </Link>
+          <button
+            onClick={() => (window.location.href = "/scanner")}
+            style={{
+              width: "220px",
+              padding: "16px",
+              fontSize: "17px",
+              fontWeight: "bold",
+              background: "white",
+              color: "#9333ea",
+              border: "2px solid #9333ea",
+              borderRadius: "12px",
+            }}
+          >
+            🖼️ Upload Image
+          </button>
         </div>
       </section>
 
-      {/* Main Content */}
       <main
         style={{
           flex: 1,
@@ -118,114 +80,57 @@ function Home() {
           width: "100%",
           margin: "0 auto",
           padding: "45px 20px",
+          boxSizing: "border-box",
         }}
       >
-        <h2
-          style={{
-            textAlign: "center",
-            color: "#1e293b",
-            marginBottom: "10px",
-          }}
-        >
+        <h2 style={{ textAlign: "center", color: "#581c87" }}>
           ⚖️ What PACKSURE Checks
         </h2>
 
-        <p
-          style={{
-            textAlign: "center",
-            color: "#64748b",
-            marginBottom: "30px",
-          }}
-        >
+        <p style={{ textAlign: "center", color: "#6b21a8" }}>
           Important information displayed on packaged products
         </p>
 
-        {/* Check Cards */}
         <div
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
             gap: "18px",
+            marginTop: "30px",
           }}
         >
-          <div
-            style={{
-              background: "#ffffff",
-              padding: "25px 20px",
-              borderRadius: "16px",
-              textAlign: "center",
-              boxShadow: "0 5px 20px rgba(0,0,0,0.08)",
-            }}
-          >
-            <div style={{ fontSize: "35px" }}>🏷️</div>
-            <h3>Product Name</h3>
-            <p style={{ color: "#64748b" }}>
-              Checks whether the product name is mentioned.
-            </p>
-          </div>
-
-          <div
-            style={{
-              background: "#ffffff",
-              padding: "25px 20px",
-              borderRadius: "16px",
-              textAlign: "center",
-              boxShadow: "0 5px 20px rgba(0,0,0,0.08)",
-            }}
-          >
-            <div style={{ fontSize: "35px" }}>⚖️</div>
-            <h3>Net Quantity</h3>
-            <p style={{ color: "#64748b" }}>
-              Checks whether the net quantity is available.
-            </p>
-          </div>
-
-          <div
-            style={{
-              background: "#ffffff",
-              padding: "25px 20px",
-              borderRadius: "16px",
-              textAlign: "center",
-              boxShadow: "0 5px 20px rgba(0,0,0,0.08)",
-            }}
-          >
-            <div style={{ fontSize: "35px" }}>🌍</div>
-            <h3>Country of Origin</h3>
-            <p style={{ color: "#64748b" }}>
-              Checks country of origin information.
-            </p>
-          </div>
-
-          <div
-            style={{
-              background: "#ffffff",
-              padding: "25px 20px",
-              borderRadius: "16px",
-              textAlign: "center",
-              boxShadow: "0 5px 20px rgba(0,0,0,0.08)",
-            }}
-          >
-            <div style={{ fontSize: "35px" }}>📅</div>
-            <h3>Packing Date</h3>
-            <p style={{ color: "#64748b" }}>
-              Checks whether packing date is available.
-            </p>
-          </div>
+          {[
+            ["📦", "Product Name"],
+            ["⚖️", "Net Quantity"],
+            ["🌍", "Country of Origin"],
+            ["📅", "Packing Date"],
+          ].map(([icon, title]) => (
+            <div
+              key={title}
+              style={{
+                background: "rgba(255,255,255,0.75)",
+                padding: "22px",
+                borderRadius: "16px",
+                textAlign: "center",
+                boxShadow: "0 5px 15px rgba(88,28,135,0.10)",
+              }}
+            >
+              <div style={{ fontSize: "35px" }}>{icon}</div>
+              <h3 style={{ color: "#581c87" }}>{title}</h3>
+            </div>
+          ))}
         </div>
       </main>
 
-      {/* Footer */}
       <footer
         style={{
           textAlign: "center",
           padding: "22px",
-          background: "#1e3a8a",
-          color: "#ffffff",
+          background: "#581c87",
+          color: "white",
         }}
       >
-        <p style={{ margin: 0 }}>
-          PACKSURE  • Legal Metrology Compliance
-        </p>
+        PACKSURE AI • Legal Metrology Compliance
       </footer>
     </div>
   );
@@ -234,13 +139,48 @@ function Home() {
 function App() {
   return (
     <BrowserRouter>
-      <Navbar />
-
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/scanner" element={<Scanner />} />
-        <Route path="/processing" element={<Processing />} />
-        <Route path="/results" element={<Results />} />
+        <Route path="/" element={<Login />} />
+
+        <Route
+          path="/home"
+          element={
+            <>
+              <Navbar />
+              <Home />
+            </>
+          }
+        />
+
+        <Route
+          path="/scanner"
+          element={
+            <>
+              <Navbar />
+              <Scanner />
+            </>
+          }
+        />
+
+        <Route
+          path="/processing"
+          element={
+            <>
+              <Navbar />
+              <Processing />
+            </>
+          }
+        />
+
+        <Route
+          path="/results"
+          element={
+            <>
+              <Navbar />
+              <Results />
+            </>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

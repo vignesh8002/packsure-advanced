@@ -5,11 +5,9 @@ import ImageUpload from "../components/ImageUpload";
 
 function Scanner() {
   const navigate = useNavigate();
-
   const [cameraImages, setCameraImages] = useState([]);
   const [uploadImages, setUploadImages] = useState([]);
 
-  // Scan images analyze
   const handleAnalyzeScanned = () => {
     if (cameraImages.length === 0) {
       alert("Please scan at least one product.");
@@ -17,13 +15,10 @@ function Scanner() {
     }
 
     navigate("/processing", {
-      state: {
-        productCount: cameraImages.length,
-      },
+      state: { productCount: cameraImages.length },
     });
   };
 
-  // Uploaded images analyze
   const handleAnalyzeUploaded = () => {
     if (uploadImages.length === 0) {
       alert("Please choose at least one product image.");
@@ -31,9 +26,7 @@ function Scanner() {
     }
 
     navigate("/processing", {
-      state: {
-        productCount: uploadImages.length,
-      },
+      state: { productCount: uploadImages.length },
     });
   };
 
@@ -47,30 +40,23 @@ function Scanner() {
         boxSizing: "border-box",
       }}
     >
-      {/* PAGE TITLE */}
-      <div
-        style={{
-          textAlign: "center",
-          marginBottom: "25px",
-        }}
-      >
+      <div style={{ textAlign: "center", marginBottom: "25px" }}>
         <div style={{ fontSize: "50px" }}>📦</div>
 
-        <h1 style={{ color: "#1e3a8a", margin: "5px 0" }}>
-          Scan Your Products
+        {/* PACKSURE - BLUE */}
+        <h1 style={{ color: "#2563eb", margin: "5px 0" }}>
+          PACKSURE
         </h1>
 
-        <p
-          style={{
-            color: "#64748b",
-            fontSize: "17px",
-          }}
-        >
+        <h2 style={{ color: "#1e3a8a" }}>
+          Scan Your Products
+        </h2>
+
+        <p style={{ color: "#64748b", fontSize: "17px" }}>
           Scan products using camera or choose product images
         </p>
       </div>
 
-      {/* CAMERA SECTION */}
       <div
         style={{
           background: "#ffffff",
@@ -82,7 +68,6 @@ function Scanner() {
       >
         <Camera onImagesChange={setCameraImages} />
 
-        {/* ANALYZE SCANNED PRODUCTS */}
         <button
           onClick={handleAnalyzeScanned}
           disabled={cameraImages.length === 0}
@@ -107,7 +92,6 @@ function Scanner() {
         </button>
       </div>
 
-      {/* UPLOAD SECTION */}
       <div
         style={{
           background: "#ffffff",
@@ -119,7 +103,6 @@ function Scanner() {
       >
         <ImageUpload onImagesChange={setUploadImages} />
 
-        {/* ANALYZE UPLOADED PRODUCTS */}
         <button
           onClick={handleAnalyzeUploaded}
           disabled={uploadImages.length === 0}

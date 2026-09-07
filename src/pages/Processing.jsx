@@ -18,7 +18,9 @@ function Processing() {
 
   useEffect(() => {
     const messageTimer = setInterval(() => {
-      setMessageIndex((current) => (current + 1) % messages.length);
+      setMessageIndex(
+        (current) => (current + 1) % messages.length
+      );
     }, 1000);
 
     const resultTimer = setTimeout(() => {
@@ -45,7 +47,12 @@ function Processing() {
         padding: "20px",
       }}
     >
-      <h1>🔍 Analyzing Products...</h1>
+      {/* PACKSURE - BLUE */}
+      <h1 style={{ color: "#2563eb" }}>
+        PACKSURE
+      </h1>
+
+      <h2>🔍 Analyzing Products...</h2>
 
       <div style={{ fontSize: "55px", margin: "15px" }}>
         ⏳
