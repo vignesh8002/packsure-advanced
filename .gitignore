@@ -1,16 +1,49 @@
-# Python-generated files
+<<<<<<< HEAD
+# Python
 __pycache__/
+*.py[cod]
+*$py.class
+
+# Python-generated files
 .pytest_cache/
 *.py[oc]
 build/
 dist/
 wheels/
-*.egg-info
+*.egg-info/
 
-# Virtual environments
+# Virtual Environments
+venv/
+env/
+.venv/
 .venv
+
+# Environment variables / secrets
+.env
+*.env
+
+# IDE
+.vscode/
+.idea/
 
 # Temporary uploaded files
 uploads/*
 !uploads/.gitkeep
+
+# OS files
+.DS_Store
+Thumbs.db
+=======
+﻿__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+*.sqlite3
+.DS_Store
+.vscode/
+>>>>>>> 75df2cc (Initial commit: PackSure Advanced Python project)
 node_modules/
+__pycache__/
+*.pyc

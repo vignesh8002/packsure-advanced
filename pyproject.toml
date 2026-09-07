@@ -9,6 +9,7 @@ dependencies = [
     "numpy",
     "opencv-python",
     "pydantic",
+    "pytesseract>=0.3.13",
     "python-multipart",
     "requests",
     "uvicorn",
