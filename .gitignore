@@ -3,10 +3,19 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Virtual Environment
+# Python-generated files
+.pytest_cache/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info/
+
+# Virtual Environments
 venv/
 env/
 .venv/
+.venv
 
 # Environment variables / secrets
 .env
@@ -15,6 +24,10 @@ env/
 # IDE
 .vscode/
 .idea/
+
+# Temporary uploaded files
+uploads/*
+!uploads/.gitkeep
 
 # OS files
 .DS_Store

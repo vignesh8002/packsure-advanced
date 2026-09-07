@@ -1,0 +1,11 @@
+opencv-python
+pillow
+numpy
+
+# API wrapper (main.py)
+fastapi
+uvicorn[standard]
+python-multipart
+
+# Only needed to run test_api_client.py (hits the running API over HTTP)
+requests
