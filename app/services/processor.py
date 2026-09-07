@@ -1,4 +1,6 @@
 import os
+import re
+from dataclasses import asdict
 from pathlib import Path
 from typing import Any, Protocol
 
@@ -6,6 +8,7 @@ import cv2
 import pytesseract
 
 from backend.ocr.pipeline import analyze_product_label
+from app.services.compliance import LegalMetrologyRuleEngine
 from image_processing.image_processor import process_image
 from image_processing.quality_checker import check_image_quality
 
@@ -52,6 +55,32 @@ class TesseractRuntimeError(ProcessingError):
 class OCRProcessor:
     """Application adapter for image preprocessing and the canonical OCR pipeline."""
 
+    def __init__(self) -> None:
+        self.compliance_engine = LegalMetrologyRuleEngine()
+
+    @staticmethod
+    def _compliance_product(analysis: dict[str, Any], quality: dict[str, Any]) -> dict[str, Any]:
+        entities = analysis["entities"]
+        quantity = entities.get("net_quantity")
+        quantity_value = None
+        quantity_unit = None
+        if isinstance(quantity, str):
+            match = re.match(r"^\s*([\d.]+)\s*([A-Za-z]+)", quantity)
+            if match:
+                quantity_value = match.group(1)
+                quantity_unit = match.group(2).lower()
+
+        return {
+            **entities,
+            "date_of_manufacture": entities.get("manufacturing_date"),
+            "consumer_care": entities.get("customer_care_phone")
+            or entities.get("customer_care_email"),
+            "net_quantity": quantity_value or quantity,
+            "quantity_unit": quantity_unit,
+            "readable": not quality.get("low_confidence", False),
+            "pdp_visible": True,
+        }
+
     def process(self, payload: dict[str, Any]) -> dict[str, Any]:
         file_path = Path(str(payload["file_path"]))
         image = cv2.imread(str(file_path), cv2.IMREAD_COLOR)
@@ -71,6 +100,9 @@ class OCRProcessor:
                 enhanced_image,
                 tesseract_cmd=tesseract_cmd,
             )
+            compliance_results = self.compliance_engine.check_product(
+                self._compliance_product(analysis, quality)
+            )
         except pytesseract.TesseractNotFoundError as error:
             raise TesseractRuntimeError() from error
         except pytesseract.TesseractError as error:
@@ -84,4 +116,8 @@ class OCRProcessor:
             "processor": "ocr",
             "quality": quality,
             **analysis,
+            "compliance": {
+                "summary": self.compliance_engine.calculate_summary(compliance_results),
+                "rules": [asdict(result) for result in compliance_results],
+            },
         }
