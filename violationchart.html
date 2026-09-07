@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PACKSURE AI - Violation Analytics</title>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            color: #1f2937;
+        }
+
+        /* Main Container */
+
+        .container {
+            width: 95%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        /* Header */
+
+        .header {
+            background: #111827;
+            color: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #cbd5e1;
+            font-size: 15px;
+        }
+
+        /* Analytics Cards */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+        }
+
+        .card h3 {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+
+        .card h2 {
+            font-size: 30px;
+        }
+
+        /* Chart Box */
+
+        .chart-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+        }
+
+        .chart-title {
+            margin-bottom: 20px;
+        }
+
+        .chart-title h2 {
+            font-size: 22px;
+            margin-bottom: 6px;
+        }
+
+        .chart-title p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 430px;
+        }
+
+        /* Insight */
+
+        .insight {
+            margin-top: 25px;
+            background: #111827;
+            color: white;
+            padding: 22px;
+            border-radius: 14px;
+        }
+
+        .insight h3 {
+            margin-bottom: 10px;
+        }
+
+        .insight p {
+            color: #d1d5db;
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+
+        @media(max-width: 800px) {
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-container {
+                height: 350px;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+
+    <div class="header">
+
+        <h1>PACKSURE AI</h1>
+
+        <p>
+            Violation Analytics & Compliance Monitoring
+        </p>
+
+    </div>
+
+
+    <!-- Analytics Cards -->
+
+    <div class="cards">
+
+        <div class="card">
+
+            <h3>Total Violations</h3>
+
+            <h2>54</h2>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Most Common Violation</h3>
+
+            <h2>Missing MRP</h2>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Violation Categories</h3>
+
+            <h2>5</h2>
+
+        </div>
+
+    </div>
+
+
+    <!-- Chart -->
+
+    <div class="chart-box">
+
+        <div class="chart-title">
+
+            <h2>Violation Distribution</h2>
+
+            <p>
+                Number of detected compliance violations by category
+            </p>
+
+        </div>
+
+
+        <div class="chart-container">
+
+            <canvas id="violationChart"></canvas>
+
+        </div>
+
+    </div>
+
+
+    <!-- Judge Insight -->
+
+    <div class="insight">
+
+        <h3>System Insight</h3>
+
+        <p>
+            PACKSURE AI analyzes scanned product labels and identifies
+            common compliance violations such as missing MRP,
+            missing country of origin, missing address, invalid quantity,
+            and missing packing date.
+        </p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // ----------------------------------
+    // PACKSURE AI VIOLATION DATA
+    // ----------------------------------
+
+    const violationLabels = [
+
+        "Missing MRP",
+
+        "Missing Country of Origin",
+
+        "Missing Address",
+
+        "Invalid Quantity",
+
+        "Missing Packing Date"
+
+    ];
+
+
+    const violationValues = [
+
+        18,
+
+        14,
+
+        10,
+
+        7,
+
+        5
+
+    ];
+
+
+    // ----------------------------------
+    // CREATE CHART
+    // ----------------------------------
+
+    const ctx = document
+        .getElementById("violationChart")
+        .getContext("2d");
+
+
+    new Chart(ctx, {
+
+        type: "bar",
+
+        data: {
+
+            labels: violationLabels,
+
+            datasets: [
+
+                {
+
+                    label: "Number of Violations",
+
+                    data: violationValues,
+
+                    borderWidth: 1,
+
+                    borderRadius: 8
+
+                }
+
+            ]
+
+        },
+
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+
+            plugins: {
+
+                legend: {
+
+                    display: true
+
+                },
+
+
+                tooltip: {
+
+                    callbacks: {
+
+                        label: function(context) {
+
+                            return " Violations: " + context.raw;
+
+                        }
+
+                    }
+
+                }
+
+            },
+
+
+            scales: {
+
+                y: {
+
+                    beginAtZero: true,
+
+                    ticks: {
+
+                        stepSize: 2
+
+                    },
+
+                    title: {
+
+                        display: true,
+
+                        text: "Number of Violations"
+
+                    }
+
+                },
+
+
+                x: {
+
+                    title: {
+
+                        display: true,
+
+                        text: "Violation Type"
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    });
+
+</script>
+
+</body>
+</html>

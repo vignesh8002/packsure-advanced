@@ -1,0 +1,973 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>PACKSURE AI - Demo Flow</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        /* ==============================
+           HEADER
+        ============================== */
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 20px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #38bdf8;
+        }
+
+        .demo-label {
+            background: #2563eb;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        /* ==============================
+           MAIN CONTAINER
+        ============================== */
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .title h1 {
+            font-size: 34px;
+            margin-bottom: 8px;
+        }
+
+        .title p {
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        /* ==============================
+           FLOW
+        ============================== */
+
+        .flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin: 30px 0;
+            gap: 10px;
+        }
+
+        .flow-step {
+            flex: 1;
+            text-align: center;
+        }
+
+        .circle {
+            width: 45px;
+            height: 45px;
+
+            border-radius: 50%;
+
+            background: #cbd5e1;
+            color: white;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            margin: auto;
+            font-weight: bold;
+        }
+
+        .flow-step.active .circle {
+            background: #2563eb;
+        }
+
+        .flow-step.completed .circle {
+            background: #16a34a;
+        }
+
+        .flow-step p {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .arrow {
+            color: #94a3b8;
+            font-size: 22px;
+        }
+
+        /* ==============================
+           DEMO CARD
+        ============================== */
+
+        .demo-card {
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 8px 30px rgba(0, 0, 0, 0.08);
+
+            margin-bottom: 25px;
+        }
+
+        .demo-card h2 {
+            margin-bottom: 10px;
+        }
+
+        .demo-card .description {
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        /* ==============================
+           SCENARIO BUTTONS
+        ============================== */
+
+        .scenarios {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 20px;
+        }
+
+        .scenario {
+            border: 2px solid #e2e8f0;
+
+            border-radius: 12px;
+
+            padding: 25px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+            background: white;
+        }
+
+        .scenario:hover {
+            transform: translateY(-3px);
+
+            border-color: #2563eb;
+
+            box-shadow:
+                0 8px 20px rgba(37, 99, 235, 0.12);
+        }
+
+        .scenario h3 {
+            margin-bottom: 10px;
+        }
+
+        .scenario p {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .scenario .icon {
+            font-size: 35px;
+            margin-bottom: 15px;
+        }
+
+        /* ==============================
+           RESULT
+        ============================== */
+
+        .result {
+            display: none;
+
+            text-align: center;
+
+            padding: 30px;
+
+            border-radius: 12px;
+
+            margin-top: 25px;
+        }
+
+        .result.pass {
+            background: #ecfdf5;
+            border: 2px solid #22c55e;
+        }
+
+        .result.fail {
+            background: #fef2f2;
+            border: 2px solid #ef4444;
+        }
+
+        .result.uncertain {
+            background: #fffbeb;
+            border: 2px solid #f59e0b;
+        }
+
+        .result-icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .result h2 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 15px;
+        }
+
+        .result-text {
+            color: #475569;
+            margin-bottom: 20px;
+        }
+
+        /* ==============================
+           BUTTONS
+        ============================== */
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: none;
+
+            padding: 12px 22px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+        }
+
+        .primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .primary:hover {
+            background: #1d4ed8;
+        }
+
+        .secondary {
+            background: #e2e8f0;
+            color: #172033;
+        }
+
+        .success {
+            background: #16a34a;
+            color: white;
+        }
+
+        .danger {
+            background: #dc2626;
+            color: white;
+        }
+
+        /* ==============================
+           FINAL SUMMARY
+        ============================== */
+
+        .summary {
+            display: none;
+
+            background: #111827;
+            color: white;
+
+            border-radius: 16px;
+
+            padding: 30px;
+
+            margin-top: 25px;
+        }
+
+        .summary h2 {
+            margin-bottom: 20px;
+        }
+
+        .summary-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 15px;
+        }
+
+        .summary-box {
+            background: #1f2937;
+
+            padding: 20px;
+
+            border-radius: 10px;
+
+            text-align: center;
+        }
+
+        .summary-box strong {
+            display: block;
+
+            font-size: 28px;
+
+            margin-bottom: 5px;
+        }
+
+        /* ==============================
+           RESPONSIVE
+        ============================== */
+
+        @media(max-width: 800px) {
+
+            .scenarios {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .flow {
+                flex-wrap: wrap;
+            }
+
+            .arrow {
+                display: none;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ==============================
+     HEADER
+============================== -->
+
+<header>
+
+    <div class="logo">
+        PACKSURE <span>AI</span>
+    </div>
+
+    <div class="demo-label">
+        SIH DEMO MODE
+    </div>
+
+</header>
+
+
+<!-- ==============================
+     MAIN
+============================== -->
+
+<div class="container">
+
+
+    <div class="title">
+
+        <h1>
+            Packaged Commodity Compliance
+        </h1>
+
+        <p>
+            Intelligent AI-powered label compliance screening
+        </p>
+
+    </div>
+
+
+    <!-- ==============================
+         FLOW INDICATOR
+    ============================== -->
+
+    <div class="flow">
+
+        <div class="flow-step active"
+             id="step1">
+
+            <div class="circle">
+                1
+            </div>
+
+            <p>
+                Select Product
+            </p>
+
+        </div>
+
+
+        <div class="arrow">
+            →
+        </div>
+
+
+        <div class="flow-step"
+             id="step2">
+
+            <div class="circle">
+                2
+            </div>
+
+            <p>
+                AI Analysis
+            </p>
+
+        </div>
+
+
+        <div class="arrow">
+            →
+        </div>
+
+
+        <div class="flow-step"
+             id="step3">
+
+            <div class="circle">
+                3
+            </div>
+
+            <p>
+                Compliance Result
+            </p>
+
+        </div>
+
+
+        <div class="arrow">
+            →
+        </div>
+
+
+        <div class="flow-step"
+             id="step4">
+
+            <div class="circle">
+                4
+            </div>
+
+            <p>
+                Dashboard
+            </p>
+
+        </div>
+
+
+        <div class="arrow">
+            →
+        </div>
+
+
+        <div class="flow-step"
+             id="step5">
+
+            <div class="circle">
+                5
+            </div>
+
+            <p>
+                Report
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==============================
+         PRODUCT SELECTION
+    ============================== -->
+
+    <div class="demo-card"
+         id="selectionCard">
+
+        <h2>
+            Select Demo Scenario
+        </h2>
+
+        <p class="description">
+            Choose one of the prepared test cases to demonstrate
+            PACKSURE AI's compliance decision.
+        </p>
+
+
+        <div class="scenarios">
+
+
+            <!-- PASS -->
+
+            <div class="scenario"
+                 onclick="runScenario('pass')">
+
+                <div class="icon">
+                    ✅
+                </div>
+
+                <h3>
+                    Scenario 1 — Clear Label
+                </h3>
+
+                <p>
+                    Product contains all required declarations
+                    and has a clear readable label.
+                </p>
+
+            </div>
+
+
+            <!-- FAIL -->
+
+            <div class="scenario"
+                 onclick="runScenario('fail')">
+
+                <div class="icon">
+                    ❌
+                </div>
+
+                <h3>
+                    Scenario 2 — Missing Declaration
+                </h3>
+
+                <p>
+                    Product label is readable but mandatory
+                    declarations are missing.
+                </p>
+
+            </div>
+
+
+            <!-- UNCERTAIN -->
+
+            <div class="scenario"
+                 onclick="runScenario('uncertain')">
+
+                <div class="icon">
+                    ⚠️
+                </div>
+
+                <h3>
+                    Scenario 3 — Blurry Label
+                </h3>
+
+                <p>
+                    Image quality is too low for reliable OCR
+                    and compliance verification.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESULT -->
+
+        <div class="result"
+             id="result">
+
+            <div class="result-icon"
+                 id="resultIcon">
+            </div>
+
+            <h2 id="resultStatus">
+            </h2>
+
+            <div class="score"
+                 id="resultScore">
+            </div>
+
+            <p class="result-text"
+               id="resultText">
+            </p>
+
+
+            <div class="buttons">
+
+                <button class="secondary"
+                        onclick="resetDemo()">
+
+                    ← Choose Another
+
+                </button>
+
+
+                <button class="primary"
+                        onclick="showDashboardDemo()">
+
+                    Open Dashboard →
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==============================
+         FINAL SUMMARY
+    ============================== -->
+
+    <div class="summary"
+         id="summary">
+
+        <h2>
+            Demo Flow Completed
+        </h2>
+
+        <div class="summary-grid">
+
+
+            <div class="summary-box">
+
+                <strong>
+                    3
+                </strong>
+
+                Test Cases
+
+            </div>
+
+
+            <div class="summary-box">
+
+                <strong>
+                    PASS
+                </strong>
+
+                Valid Label
+
+            </div>
+
+
+            <div class="summary-box">
+
+                <strong>
+                    FAIL
+                </strong>
+
+                Violation Detected
+
+            </div>
+
+
+            <div class="summary-box">
+
+                <strong>
+                    UNCERTAIN
+                </strong>
+
+                Low Confidence
+
+            </div>
+
+        </div>
+
+
+        <br>
+
+
+        <div class="buttons">
+
+            <button class="success"
+                    onclick="openReport()">
+
+                Generate Compliance Report
+
+            </button>
+
+
+            <button class="secondary"
+                    onclick="resetDemo()">
+
+                Restart Demo
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+/* ==========================================
+   DEMO DATA
+========================================== */
+
+const demoResults = {
+
+    pass: {
+
+        status: "PASS",
+
+        score: "96%",
+
+        icon: "✅",
+
+        title: "COMPLIANT",
+
+        message:
+            "All required declarations were detected. " +
+            "The product label passed automated compliance screening."
+
+    },
+
+
+    fail: {
+
+        status: "FAIL",
+
+        score: "61%",
+
+        icon: "❌",
+
+        title: "NON-COMPLIANT",
+
+        message:
+            "Mandatory declarations were not detected. " +
+            "The product requires corrective action."
+
+    },
+
+
+    uncertain: {
+
+        status: "UNCERTAIN",
+
+        score: "48%",
+
+        icon: "⚠️",
+
+        title: "VERIFICATION REQUIRED",
+
+        message:
+            "The image quality is too low for reliable OCR. " +
+            "Manual verification is recommended."
+
+    }
+
+};
+
+
+/* ==========================================
+   RUN SCENARIO
+========================================== */
+
+function runScenario(type) {
+
+    const data = demoResults[type];
+
+    const result = document.getElementById("result");
+
+    const icon = document.getElementById("resultIcon");
+
+    const status = document.getElementById("resultStatus");
+
+    const score = document.getElementById("resultScore");
+
+    const text = document.getElementById("resultText");
+
+
+    /* Update result */
+
+    icon.innerHTML = data.icon;
+
+    status.innerHTML = data.title;
+
+    score.innerHTML =
+        "Compliance Score: " + data.score;
+
+    text.innerHTML = data.message;
+
+
+    /* Reset classes */
+
+    result.className = "result";
+
+
+    if (type === "pass") {
+
+        result.classList.add("pass");
+
+    }
+
+    else if (type === "fail") {
+
+        result.classList.add("fail");
+
+    }
+
+    else {
+
+        result.classList.add("uncertain");
+
+    }
+
+
+    result.style.display = "block";
+
+
+    /* Update flow */
+
+    document.getElementById("step1")
+        .classList.add("completed");
+
+    document.getElementById("step2")
+        .classList.add("completed");
+
+    document.getElementById("step3")
+        .classList.add("active");
+
+
+    /* Scroll */
+
+    result.scrollIntoView({
+        behavior: "smooth"
+    });
+
+}
+
+
+/* ==========================================
+   DASHBOARD DEMO
+========================================== */
+
+function showDashboardDemo() {
+
+    document.getElementById("step3")
+        .classList.add("completed");
+
+    document.getElementById("step4")
+        .classList.add("completed");
+
+    document.getElementById("summary")
+        .style.display = "block";
+
+
+    document.getElementById("summary")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+
+}
+
+
+/* ==========================================
+   OPEN REPORT
+========================================== */
+
+function openReport() {
+
+    document.getElementById("step5")
+        .classList.add("completed");
+
+
+    alert(
+        "Compliance Report Ready!\n\n" +
+        "The selected product's compliance report " +
+        "can now be opened from the Reports section."
+    );
+
+}
+
+
+/* ==========================================
+   RESET
+========================================== */
+
+function resetDemo() {
+
+    document.getElementById("result")
+        .style.display = "none";
+
+
+    document.getElementById("summary")
+        .style.display = "none";
+
+
+    for (let i = 1; i <= 5; i++) {
+
+        document.getElementById("step" + i)
+            .classList.remove("active");
+
+        document.getElementById("step" + i)
+            .classList.remove("completed");
+
+    }
+
+
+    document.getElementById("step1")
+        .classList.add("active");
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+</script>
+
+
+</body>
+
+</html>
+```
